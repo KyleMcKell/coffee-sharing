@@ -11,14 +11,13 @@ export const UsersTable = pgTable(
   "users",
   {
     id: serial("id").primaryKey(),
-    name: text("name").notNull(),
-    email: text("email").notNull(),
-    image: text("image").notNull(),
+    externalId: text("externalId").notNull(),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt"),
   },
   (users) => {
     return {
-      uniqueIdx: uniqueIndex("unique_idx").on(users.email),
+      uniqueIdx: uniqueIndex("unique_external_id_idx").on(users.externalId),
     }
   }
 )

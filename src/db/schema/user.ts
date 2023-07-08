@@ -1,10 +1,4 @@
-import {
-  pgTable,
-  serial,
-  text,
-  timestamp,
-  uniqueIndex,
-} from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
 import { InferModel } from "drizzle-orm"
 
 export const UsersTable = pgTable(

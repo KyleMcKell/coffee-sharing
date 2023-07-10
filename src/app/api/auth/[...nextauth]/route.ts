@@ -7,9 +7,9 @@ import NextAuth, {
 } from "next-auth"
 import { type Adapter } from "next-auth/adapters"
 import DiscordProvider from "next-auth/providers/discord"
-import { db } from "@/db"
-import { users } from "@/db/schema/user"
-import { sessions, accounts, verificationTokens } from "@/db/schema/auth"
+import { db } from "~/db"
+import { users } from "~/db/schema/user"
+import { sessions, accounts, verificationTokens } from "~/db/schema/auth"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

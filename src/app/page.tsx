@@ -1,4 +1,4 @@
-import { AuthButton } from "@/components/AuthButton"
+import { AuthButton } from "~/components/AuthButton"
 import { authOptions } from "./api/auth/[...nextauth]/route"
 import { getServerSession } from "next-auth"
 

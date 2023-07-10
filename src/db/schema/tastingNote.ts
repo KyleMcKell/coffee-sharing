@@ -7,7 +7,9 @@ import { coffeeBeanTastingNote } from "./coffeeBeanTastingNote";
 export const tastingNote = pgTable("tasting_note", {
   id: uuid("id").notNull().primaryKey(),
   note: varchar("name", { length: 255 }).notNull(),
-  baristaId: varchar("barista_id", { length: 255 }).notNull(),
+  baristaId: varchar("barista_id", { length: 255 })
+    .notNull()
+    .references(() => user.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

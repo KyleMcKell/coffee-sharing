@@ -15,6 +15,13 @@
       "when": 1688853167918,
       "tag": "0001_woozy_wong",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1688973940961,
+      "tag": "0002_blushing_celestials",
+      "breakpoints": true
     }
   ]
 }

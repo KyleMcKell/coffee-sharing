@@ -9,9 +9,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "migrations:generate": "drizzle-kit generate:pg",
-    "migrations:push": "node -r esbuild-register src/db/migrate.ts",
-    "migrations:drop": "drizzle-kit drop --config=drizzle.config.ts"
+    "migration:generate": "drizzle-kit generate:pg",
+    "migration:push": "node -r esbuild-register src/db/migrate.ts",
+    "migration:drop": "drizzle-kit drop --config=drizzle.config.ts"
   },
   "dependencies": {
     "@total-typescript/ts-reset": "^0.4.2",

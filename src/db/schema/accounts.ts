@@ -8,9 +8,9 @@ import {
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 
-import { usersTable } from "./user"
+import { usersTable } from "./users"
 
-export const accountsTable = pgTable(
+export const accounts = pgTable(
   "accounts",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
@@ -33,28 +33,15 @@ export const accountsTable = pgTable(
   })
 )
 
-export const accountsRelations = relations(accountsTable, ({ one }) => ({
+export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(usersTable, {
-    fields: [accountsTable.userId],
+    fields: [accounts.userId],
     references: [usersTable.id],
   }),
 }))
 
-export const sessionsTable = pgTable("sessions", {
-  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
-  userId: varchar("userId", { length: 255 }).notNull(),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
-})
-
-export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
-  user: one(usersTable, {
-    fields: [sessionsTable.userId],
-    references: [usersTable.id],
-  }),
-}))
-
-export const verificationTokensTable = pgTable(
-  "verificationToken",
+export const verificationTokens = pgTable(
+  "verificationTokens",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
     token: varchar("token", { length: 255 }).notNull(),

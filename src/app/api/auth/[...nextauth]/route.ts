@@ -9,11 +9,7 @@ import { type Adapter } from "next-auth/adapters"
 import DiscordProvider from "next-auth/providers/discord"
 import { db } from "~/db"
 import { usersTable } from "~/db/schema/user"
-import {
-  sessionsTable,
-  accountsTable,
-  verificationTokensTable,
-} from "~/db/schema/auth"
+import { sessions, accounts, verificationTokens } from "~/db/schema/auth"
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -122,24 +118,24 @@ export function DrizzleAdapter(): Adapter {
       return user[0] ?? null
     },
     createSession: async (data) => {
-      await db.insert(sessionsTable).values(data)
+      await db.insert(sessions).values(data)
 
       const session = await db
         .select()
-        .from(sessionsTable)
-        .where(eq(sessionsTable.sessionToken, data.sessionToken))
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data.sessionToken))
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return session[0]!
     },
     getSessionAndUser: async (data) => {
       const sessionAndUser = await db
         .select({
-          session: sessionsTable,
+          session: sessions,
           user: usersTable,
         })
-        .from(sessionsTable)
-        .where(eq(sessionsTable.sessionToken, data))
-        .innerJoin(usersTable, eq(usersTable.id, sessionsTable.userId))
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data))
+        .innerJoin(usersTable, eq(usersTable.id, sessions.userId))
 
       return sessionAndUser[0] ?? null
     },
@@ -159,49 +155,47 @@ export function DrizzleAdapter(): Adapter {
     },
     updateSession: async (data) => {
       await db
-        .update(sessionsTable)
+        .update(sessions)
         .set(data)
-        .where(eq(sessionsTable.sessionToken, data.sessionToken))
+        .where(eq(sessions.sessionToken, data.sessionToken))
 
       return db
         .select()
-        .from(sessionsTable)
-        .where(eq(sessionsTable.sessionToken, data.sessionToken))
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data.sessionToken))
         .then((res) => res[0])
     },
     linkAccount: async (rawAccount) => {
       await db
-        .insert(accountsTable)
+        .insert(accounts)
         .values(rawAccount)
         .then((res) => res.rows[0])
     },
     getUserByAccount: async (account) => {
       const dbAccount = await db
         .select()
-        .from(accountsTable)
+        .from(accounts)
         .where(
           and(
-            eq(accountsTable.providerAccountId, account.providerAccountId),
-            eq(accountsTable.provider, account.provider)
+            eq(accounts.providerAccountId, account.providerAccountId),
+            eq(accounts.provider, account.provider)
           )
         )
-        .leftJoin(usersTable, eq(accountsTable.userId, usersTable.id))
+        .leftJoin(usersTable, eq(accounts.userId, usersTable.id))
         .then((res) => res[0])
 
-      return dbAccount?.users ?? null
+      return dbAccount?.user ?? null
     },
     deleteSession: async (sessionToken) => {
-      await db
-        .delete(sessionsTable)
-        .where(eq(sessionsTable.sessionToken, sessionToken))
+      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken))
     },
     createVerificationToken: async (token) => {
-      await db.insert(verificationTokensTable).values(token)
+      await db.insert(verificationTokens).values(token)
 
       return db
         .select()
-        .from(verificationTokensTable)
-        .where(eq(verificationTokensTable.identifier, token.identifier))
+        .from(verificationTokens)
+        .where(eq(verificationTokens.identifier, token.identifier))
         .then((res) => res[0])
     },
     useVerificationToken: async (token) => {
@@ -209,21 +203,21 @@ export function DrizzleAdapter(): Adapter {
         const deletedToken =
           (await db
             .select()
-            .from(verificationTokensTable)
+            .from(verificationTokens)
             .where(
               and(
-                eq(verificationTokensTable.identifier, token.identifier),
-                eq(verificationTokensTable.token, token.token)
+                eq(verificationTokens.identifier, token.identifier),
+                eq(verificationTokens.token, token.token)
               )
             )
             .then((res) => res[0])) ?? null
 
         await db
-          .delete(verificationTokensTable)
+          .delete(verificationTokens)
           .where(
             and(
-              eq(verificationTokensTable.identifier, token.identifier),
-              eq(verificationTokensTable.token, token.token)
+              eq(verificationTokens.identifier, token.identifier),
+              eq(verificationTokens.token, token.token)
             )
           )
 
@@ -235,19 +229,19 @@ export function DrizzleAdapter(): Adapter {
     deleteUser: async (id) => {
       await Promise.all([
         db.delete(usersTable).where(eq(usersTable.id, id)),
-        db.delete(sessionsTable).where(eq(sessionsTable.userId, id)),
-        db.delete(accountsTable).where(eq(accountsTable.userId, id)),
+        db.delete(sessions).where(eq(sessions.userId, id)),
+        db.delete(accounts).where(eq(accounts.userId, id)),
       ])
 
       return null
     },
     unlinkAccount: async (account) => {
       await db
-        .delete(accountsTable)
+        .delete(accounts)
         .where(
           and(
-            eq(accountsTable.providerAccountId, account.providerAccountId),
-            eq(accountsTable.provider, account.provider)
+            eq(accounts.providerAccountId, account.providerAccountId),
+            eq(accounts.provider, account.provider)
           )
         )
 

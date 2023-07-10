@@ -1,14 +1,8 @@
-import { type AdapterAccount } from "next-auth/adapters"
-import {
-  pgTable,
-  timestamp,
-  primaryKey,
-  integer,
-  varchar,
-} from "drizzle-orm/pg-core"
-import { relations } from "drizzle-orm"
+import { type AdapterAccount } from "next-auth/adapters";
+import { pgTable, primaryKey, integer, varchar } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
-import { usersTable } from "./users"
+import { usersTable } from "./users";
 
 export const accounts = pgTable(
   "accounts",
@@ -31,11 +25,11 @@ export const accounts = pgTable(
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
   })
-)
+);
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(usersTable, {
     fields: [accounts.userId],
     references: [usersTable.id],
   }),
-}))
+}));

@@ -1,4 +1,4 @@
-import { pgTable, varchar, timestamp, uuid, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, varchar, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
 import { user } from "./user";
@@ -13,7 +13,7 @@ export const tastingNote = pgTable("tasting_note", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const coffeeBeansRelations = relations(tastingNote, ({ one, many }) => ({
+export const tastingNoteRelations = relations(tastingNote, ({ one, many }) => ({
   barista: one(user, {
     fields: [tastingNote.baristaId],
     references: [user.id],

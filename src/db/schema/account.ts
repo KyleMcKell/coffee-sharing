@@ -2,10 +2,10 @@ import { type AdapterAccount } from "next-auth/adapters";
 import { pgTable, primaryKey, integer, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-import { usersTable } from "./users";
+import { user } from "./user";
 
-export const accounts = pgTable(
-  "accounts",
+export const account = pgTable(
+  "account",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
     type: varchar("type", { length: 255 })
@@ -27,9 +27,9 @@ export const accounts = pgTable(
   })
 );
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(usersTable, {
-    fields: [accounts.userId],
-    references: [usersTable.id],
+export const accountsRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
   }),
 }));

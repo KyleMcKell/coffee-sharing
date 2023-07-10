@@ -1,7 +1,6 @@
 import { type AdapterAccount } from "next-auth/adapters"
 import {
   pgTable,
-  text,
   timestamp,
   primaryKey,
   integer,
@@ -9,9 +8,9 @@ import {
 } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 
-import { users } from "./user"
+import { usersTable } from "./user"
 
-export const accounts = pgTable(
+export const accountsTable = pgTable(
   "accounts",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
@@ -34,27 +33,27 @@ export const accounts = pgTable(
   })
 )
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
+export const accountsRelations = relations(accountsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [accountsTable.userId],
+    references: [usersTable.id],
   }),
 }))
 
-export const sessions = pgTable("sessions", {
+export const sessionsTable = pgTable("sessions", {
   sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
   userId: varchar("userId", { length: 255 }).notNull(),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
+export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [sessionsTable.userId],
+    references: [usersTable.id],
   }),
 }))
 
-export const verificationTokens = pgTable(
+export const verificationTokensTable = pgTable(
   "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),

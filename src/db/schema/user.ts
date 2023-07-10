@@ -1,23 +1,20 @@
-import { pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
+import { pgTable, varchar, timestamp } from "drizzle-orm/pg-core"
 import { InferModel } from "drizzle-orm"
+import { relations } from "drizzle-orm"
 
-export const UsersTable = pgTable(
-  "users",
-  {
-    id: text("id").notNull().primaryKey(),
-    name: text("name"),
-    email: text("email").notNull(),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
-    image: text("image"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
-  },
-  (users) => {
-    return {
-      uniqueEmailIdx: uniqueIndex("unique_email_idx").on(users.email),
-    }
-  }
-)
+import { accounts } from "./auth"
 
-export type User = InferModel<typeof UsersTable>
-export type NewUser = InferModel<typeof UsersTable, "insert">
+export const users = pgTable("users", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: varchar("image", { length: 255 }),
+})
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}))
+
+export type User = InferModel<typeof users>
+export type NewUser = InferModel<typeof users, "insert">

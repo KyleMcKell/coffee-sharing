@@ -1,13 +1,17 @@
-"use client"
-import { signIn } from "next-auth/react"
+import { AuthButton } from "@/components/AuthButton"
+import { authOptions } from "./api/auth/[...nextauth]/route"
+import { getServerSession } from "next-auth"
 
-export default function Home() {
+const Home = async () => {
+  const session = await getServerSession(authOptions)
+  console.log(session)
+
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">
       <p>hi there</p>
-      <button className="text-black" onClick={() => signIn("github")}>
-        Sign in
-      </button>
+      <AuthButton />
     </main>
   )
 }
+
+export default Home

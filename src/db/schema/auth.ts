@@ -1,57 +1,67 @@
+import { type AdapterAccount } from "next-auth/adapters"
 import {
   pgTable,
   text,
   timestamp,
   primaryKey,
   integer,
+  varchar,
 } from "drizzle-orm/pg-core"
+import { relations } from "drizzle-orm"
 
-import { UsersTable } from "./user"
+import { users } from "./user"
 
-export const AccountsTable = pgTable(
+export const accounts = pgTable(
   "accounts",
   {
-    userId: text("userId")
-      .notNull()
-      .references(() => UsersTable.id, { onDelete: "cascade" }),
-    type: text("type").notNull(),
-    provider: text("provider").notNull(),
-    providerAccountId: text("providerAccountId").notNull(),
-    refresh_token: text("refresh_token"),
-    access_token: text("access_token"),
+    userId: varchar("userId", { length: 255 }).notNull(),
+    type: varchar("type", { length: 255 })
+      .$type<AdapterAccount["type"]>()
+      .notNull(),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    refresh_token: varchar("refresh_token", { length: 255 }),
+    access_token: varchar("access_token", { length: 255 }),
     expires_at: integer("expires_at"),
-    token_type: text("token_type"),
-    scope: text("scope"),
-    id_token: text("id_token"),
-    session_state: text("session_state"),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: varchar("id_token", { length: 255 }),
+    session_state: varchar("session_state", { length: 255 }),
+    refresh_token_expires_in: integer("refresh_token_expires_in"),
   },
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
   })
 )
 
-export const SessionsTable = pgTable("sessions", {
-  sessionToken: text("sessionToken").notNull().primaryKey(),
-  userId: text("userId")
-    .notNull()
-    .references(() => UsersTable.id, { onDelete: "cascade" }),
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
+  }),
+}))
+
+export const sessions = pgTable("sessions", {
+  sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
+  userId: varchar("userId", { length: 255 }).notNull(),
   expires: timestamp("expires", { mode: "date" }).notNull(),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 })
 
-export const VerificationTokensTable = pgTable(
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}))
+
+export const verificationTokens = pgTable(
   "verificationToken",
   {
-    identifier: text("identifier").notNull(),
-    token: text("token").notNull(),
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
-    updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
-  (token) => ({
-    compoundKey: primaryKey(token.identifier, token.token),
+  (vt) => ({
+    compoundKey: primaryKey(vt.identifier, vt.token),
   })
 )

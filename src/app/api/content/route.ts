@@ -1,3 +1,9 @@
+import { getServerSession } from "next-auth"
+import { authOptions, getServerAuthSession } from "../auth/[...nextauth]/route"
+import { NextResponse } from "next/server"
+import { getSession } from "next-auth/react"
+import { NextApiHandler, NextApiRequest } from "next"
+
 const posts = [
   {
     title: "Lorem Ipsum",
@@ -31,13 +37,10 @@ const posts = [
   },
 ]
 
-import { getServerSession } from "next-auth"
-import { NextResponse } from "next/server"
-
-export async function GET() {
-  const session = await getServerSession()
+export const GET: NextApiHandler = async () => {
+  const session = await getServerAuthSession()
   if (session) {
-    return NextResponse.json(posts)
+    return NextResponse.json({ data: session }, { status: 200 })
   }
-  return NextResponse.json("You fucked up")
+  return NextResponse.json({ error: "Session not found" }, { status: 404 })
 }

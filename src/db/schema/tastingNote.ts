@@ -6,11 +6,9 @@ import { coffeeBeanTastingNote } from "./coffeeBeanTastingNote";
 
 export const tastingNote = pgTable("tasting_note", {
   id: uuid("id").notNull().primaryKey(),
-  baristaId: varchar("baristaId", { length: 255 }).notNull(),
-  name: varchar("name", { length: 255 }).notNull(),
-  brand: varchar("brand", { length: 255 }),
-  tasteNotes: jsonb("tasteNotes").$type<string[]>(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  note: varchar("name", { length: 255 }).notNull(),
+  baristaId: varchar("barista_id", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const coffeeBeansRelations = relations(tastingNote, ({ one, many }) => ({

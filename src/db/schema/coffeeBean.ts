@@ -5,11 +5,11 @@ import { coffeeBeanTastingNote } from "./coffeeBeanTastingNote";
 
 export const coffeeBean = pgTable("coffee_bean", {
   id: uuid("id").notNull().primaryKey(),
-  baristaId: varchar("baristaId", { length: 255 }).notNull(),
+  baristaId: varchar("barista_id", { length: 255 }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
   brand: varchar("brand", { length: 255 }),
-  tastingNotes: json("tasteNotes").$type<string[]>(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  tastingNotes: json("taste_notes").$type<string[]>(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const coffeeBeansRelations = relations(coffeeBean, ({ one, many }) => ({

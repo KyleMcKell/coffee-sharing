@@ -1,16 +1,16 @@
-"use client"
-import { SessionProvider, signIn, signOut, useSession } from "next-auth/react"
+"use client";
+import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 
 export const AuthButton = () => {
   return (
     <SessionProvider>
       <AuthButtonLogic />
     </SessionProvider>
-  )
-}
+  );
+};
 
 const AuthButtonLogic = () => {
-  const { status, data } = useSession()
+  const { status, data } = useSession();
 
   return (
     <>
@@ -28,5 +28,5 @@ const AuthButtonLogic = () => {
         </>
       ) : null}
     </>
-  )
-}
+  );
+};

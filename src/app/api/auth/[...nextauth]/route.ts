@@ -1,15 +1,15 @@
-import { and, eq } from "drizzle-orm"
-import { type GetServerSidePropsContext } from "next"
+import { and, eq } from "drizzle-orm";
+import { type GetServerSidePropsContext } from "next";
 import NextAuth, {
   getServerSession,
   type NextAuthOptions,
   type DefaultSession,
-} from "next-auth"
-import { type Adapter } from "next-auth/adapters"
-import DiscordProvider from "next-auth/providers/discord"
-import { db } from "~/db"
-import { usersTable } from "~/db/schema/user"
-import { sessions, accounts, verificationTokens } from "~/db/schema/auth"
+} from "next-auth";
+import { type Adapter } from "next-auth/adapters";
+import DiscordProvider from "next-auth/providers/discord";
+import { db } from "~/db";
+import { usersTable } from "~/db/schema/user";
+import { sessions, accounts, verificationTokens } from "~/db/schema/auth";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -20,10 +20,10 @@ import { sessions, accounts, verificationTokens } from "~/db/schema/auth"
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
-      id: string
+      id: string;
       // ...other properties
       // role: UserRole;
-    } & DefaultSession["user"]
+    } & DefaultSession["user"];
   }
 
   // interface User {
@@ -63,7 +63,7 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-}
+};
 
 /**
  * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
@@ -71,14 +71,14 @@ export const authOptions: NextAuthOptions = {
  * @see https://next-auth.js.org/configuration/nextjs
  */
 export const getServerAuthSession = (ctx?: {
-  req: GetServerSidePropsContext["req"]
-  res: GetServerSidePropsContext["res"]
+  req: GetServerSidePropsContext["req"];
+  res: GetServerSidePropsContext["res"];
 }) => {
   if (ctx) {
-    return getServerSession(ctx.req, ctx.res, authOptions)
+    return getServerSession(ctx.req, ctx.res, authOptions);
   }
-  return getServerSession(authOptions)
-}
+  return getServerSession(authOptions);
+};
 
 /**
  * Adapter for Drizzle ORM. This is not yet available in NextAuth directly, so we inhouse our own.
@@ -91,41 +91,41 @@ export const getServerAuthSession = (ctx?: {
 export function DrizzleAdapter(): Adapter {
   return {
     createUser: async (data) => {
-      const id = crypto.randomUUID()
+      const id = crypto.randomUUID();
 
-      await db.insert(usersTable).values({ ...data, id })
+      await db.insert(usersTable).values({ ...data, id });
 
       const user = await db
         .select()
         .from(usersTable)
         .where(eq(usersTable.id, id))
-        .then((res) => res[0])
+        .then((res) => res[0]);
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return user!
+      return user!;
     },
     getUser: async (data) => {
       const user = await db
         .select()
         .from(usersTable)
-        .where(eq(usersTable.id, data))
-      return user[0] ?? null
+        .where(eq(usersTable.id, data));
+      return user[0] ?? null;
     },
     getUserByEmail: async (data) => {
       const user = await db
         .select()
         .from(usersTable)
-        .where(eq(usersTable.email, data))
-      return user[0] ?? null
+        .where(eq(usersTable.email, data));
+      return user[0] ?? null;
     },
     createSession: async (data) => {
-      await db.insert(sessions).values(data)
+      await db.insert(sessions).values(data);
 
       const session = await db
         .select()
         .from(sessions)
-        .where(eq(sessions.sessionToken, data.sessionToken))
+        .where(eq(sessions.sessionToken, data.sessionToken));
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return session[0]!
+      return session[0]!;
     },
     getSessionAndUser: async (data) => {
       const sessionAndUser = await db
@@ -135,41 +135,41 @@ export function DrizzleAdapter(): Adapter {
         })
         .from(sessions)
         .where(eq(sessions.sessionToken, data))
-        .innerJoin(usersTable, eq(usersTable.id, sessions.userId))
+        .innerJoin(usersTable, eq(usersTable.id, sessions.userId));
 
-      return sessionAndUser[0] ?? null
+      return sessionAndUser[0] ?? null;
     },
     updateUser: async (data) => {
       if (!data.id) {
-        throw new Error("No user id.")
+        throw new Error("No user id.");
       }
 
-      await db.update(usersTable).set(data).where(eq(usersTable.id, data.id))
+      await db.update(usersTable).set(data).where(eq(usersTable.id, data.id));
 
       const user = await db
         .select()
         .from(usersTable)
-        .where(eq(usersTable.id, data.id))
+        .where(eq(usersTable.id, data.id));
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return user[0]!
+      return user[0]!;
     },
     updateSession: async (data) => {
       await db
         .update(sessions)
         .set(data)
-        .where(eq(sessions.sessionToken, data.sessionToken))
+        .where(eq(sessions.sessionToken, data.sessionToken));
 
       return db
         .select()
         .from(sessions)
         .where(eq(sessions.sessionToken, data.sessionToken))
-        .then((res) => res[0])
+        .then((res) => res[0]);
     },
     linkAccount: async (rawAccount) => {
       await db
         .insert(accounts)
         .values(rawAccount)
-        .then((res) => res.rows[0])
+        .then((res) => res.rows[0]);
     },
     getUserByAccount: async (account) => {
       const dbAccount = await db
@@ -178,25 +178,25 @@ export function DrizzleAdapter(): Adapter {
         .where(
           and(
             eq(accounts.providerAccountId, account.providerAccountId),
-            eq(accounts.provider, account.provider)
-          )
+            eq(accounts.provider, account.provider),
+          ),
         )
         .leftJoin(usersTable, eq(accounts.userId, usersTable.id))
-        .then((res) => res[0])
+        .then((res) => res[0]);
 
-      return dbAccount?.user ?? null
+      return dbAccount?.user ?? null;
     },
     deleteSession: async (sessionToken) => {
-      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken))
+      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken));
     },
     createVerificationToken: async (token) => {
-      await db.insert(verificationTokens).values(token)
+      await db.insert(verificationTokens).values(token);
 
       return db
         .select()
         .from(verificationTokens)
         .where(eq(verificationTokens.identifier, token.identifier))
-        .then((res) => res[0])
+        .then((res) => res[0]);
     },
     useVerificationToken: async (token) => {
       try {
@@ -207,23 +207,23 @@ export function DrizzleAdapter(): Adapter {
             .where(
               and(
                 eq(verificationTokens.identifier, token.identifier),
-                eq(verificationTokens.token, token.token)
-              )
+                eq(verificationTokens.token, token.token),
+              ),
             )
-            .then((res) => res[0])) ?? null
+            .then((res) => res[0])) ?? null;
 
         await db
           .delete(verificationTokens)
           .where(
             and(
               eq(verificationTokens.identifier, token.identifier),
-              eq(verificationTokens.token, token.token)
-            )
-          )
+              eq(verificationTokens.token, token.token),
+            ),
+          );
 
-        return deletedToken
+        return deletedToken;
       } catch (err) {
-        throw new Error("No verification token found.")
+        throw new Error("No verification token found.");
       }
     },
     deleteUser: async (id) => {
@@ -231,9 +231,9 @@ export function DrizzleAdapter(): Adapter {
         db.delete(usersTable).where(eq(usersTable.id, id)),
         db.delete(sessions).where(eq(sessions.userId, id)),
         db.delete(accounts).where(eq(accounts.userId, id)),
-      ])
+      ]);
 
-      return null
+      return null;
     },
     unlinkAccount: async (account) => {
       await db
@@ -241,14 +241,14 @@ export function DrizzleAdapter(): Adapter {
         .where(
           and(
             eq(accounts.providerAccountId, account.providerAccountId),
-            eq(accounts.provider, account.provider)
-          )
-        )
+            eq(accounts.provider, account.provider),
+          ),
+        );
 
-      return undefined
+      return undefined;
     },
-  }
+  };
 }
 
-const handler = NextAuth(authOptions)
-export { handler as GET, handler as POST }
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

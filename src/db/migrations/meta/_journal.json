@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1688800995973,
-      "tag": "0000_sturdy_baron_strucker",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1688853167918,
-      "tag": "0001_woozy_wong",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1688973940961,
-      "tag": "0002_blushing_celestials",
+      "when": 1688975170688,
+      "tag": "0000_sticky_luckman",
       "breakpoints": true
     }
   ]

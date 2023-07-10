@@ -4,7 +4,6 @@ import "dotenv/config";
 export default {
   schema: "./src/db/schema/*",
   out: "./src/db/migrations",
-  driver: "pg",
   dbCredentials: {
     connectionString: process.env.POSTGRES_URL || "",
   },

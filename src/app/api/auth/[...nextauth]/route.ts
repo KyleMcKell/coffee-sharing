@@ -10,7 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { db } from "~/db";
 import { user } from "~/db/schema/user";
 import { session } from "~/db/schema/session";
-import { Account, account } from "~/db/schema/account";
+import { account } from "~/db/schema/account";
 import { verificationToken } from "~/db/schema/verificationToken";
 
 /**
@@ -164,10 +164,31 @@ export function DrizzleAdapter(): Adapter {
     },
     linkAccount: async (rawAccount) => {
       console.log("link account");
-      await db
+      const updatedAccount = await db
         .insert(account)
         .values(rawAccount)
-        .then((res) => res.rows[0]);
+        .returning()
+        .then((res) => res[0]);
+
+      if (!updatedAccount) {
+        console.log("no account");
+        return;
+      }
+
+      // Drizzle will return `null` for fields that are not defined.
+      // However, the return type is expecting `undefined`.
+      const fixedAccount = {
+        ...updatedAccount,
+        access_token: updatedAccount.accessToken ?? undefined,
+        token_type: updatedAccount.tokenType ?? undefined,
+        id_token: updatedAccount.idToken ?? undefined,
+        refresh_token: updatedAccount.refreshToken ?? undefined,
+        scope: updatedAccount.scope ?? undefined,
+        expires_at: updatedAccount.expiresAt ?? undefined,
+        session_state: updatedAccount.sessionState ?? undefined,
+      };
+
+      return fixedAccount;
     },
     getUserByAccount: async (a) => {
       console.log("get user by account");

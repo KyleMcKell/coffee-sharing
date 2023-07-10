@@ -15,7 +15,7 @@ const AuthButtonLogic = () => {
   return (
     <>
       {status === "unauthenticated" ? (
-        <button className="text-black" onClick={() => signIn("discord")}>
+        <button className="text-black" onClick={() => signIn("google")}>
           Sign in
         </button>
       ) : null}
@@ -24,7 +24,7 @@ const AuthButtonLogic = () => {
           <button className="text-black" onClick={() => signOut()}>
             Sign out
           </button>
-          {data.user.name}
+          {data.user?.name}
         </>
       ) : null}
     </>

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
-  console.log(session);
+  console.log("session from home", session);
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">

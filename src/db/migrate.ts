@@ -19,7 +19,7 @@ const runMigrate = async () => {
   try {
     await migrate(db, { migrationsFolder: "src/db/migrations" });
   } catch (e) {
-    console.log(e);
+    console.log("error from migration", e);
     console.log("🥶 Trying again for coldstart");
     await migrate(db, { migrationsFolder: "src/db/migrations" });
   }

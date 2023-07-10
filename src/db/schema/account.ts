@@ -1,3 +1,4 @@
+import { InferModel } from "drizzle-orm";
 import { type AdapterAccount } from "next-auth/adapters";
 import {
   pgTable,
@@ -37,7 +38,6 @@ export const account = pgTable(
   (account) => {
     return {
       compoundKey: primaryKey(account.provider, account.providerAccountId),
-      userIdx: index("user_idx").on(account.userId),
     };
   }
 );
@@ -48,3 +48,5 @@ export const accountsRelations = relations(account, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export type Account = InferModel<typeof account>;

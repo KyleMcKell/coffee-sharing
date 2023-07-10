@@ -7,7 +7,7 @@ import { coffeeBean } from "./coffeeBean";
 
 export const user = pgTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull().default(""),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("email_verified", { mode: "date" }),
   image: varchar("image", { length: 255 }),

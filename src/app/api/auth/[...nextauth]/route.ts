@@ -10,7 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { db } from "~/db";
 import { user } from "~/db/schema/user";
 import { session } from "~/db/schema/session";
-import { account } from "~/db/schema/account";
+import { Account, account } from "~/db/schema/account";
 import { verificationToken } from "~/db/schema/verificationToken";
 
 /**

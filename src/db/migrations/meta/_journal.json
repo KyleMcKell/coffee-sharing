@@ -8,6 +8,27 @@
       "when": 1688975170688,
       "tag": "0000_sticky_luckman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1688979303725,
+      "tag": "0001_clear_loa",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1688980314546,
+      "tag": "0002_sticky_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1688980845897,
+      "tag": "0003_oval_the_fury",
+      "breakpoints": true
     }
   ]
 }

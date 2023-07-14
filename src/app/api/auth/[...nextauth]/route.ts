@@ -10,7 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import { db } from "~/db";
 import { users } from "~/db/schema/users";
 import { sessions } from "~/db/schema/sessions";
-import { NewAccount, accounts } from "~/db/schema/accounts";
+import { accounts, type NewAccount } from "~/db/schema/accounts";
 import { verificationTokens } from "~/db/schema/verificationTokens";
 
 /**
@@ -89,31 +89,6 @@ export const getServerAuthSession = (ctx?: {
  * @see
  * https://github.com/nextauthjs/next-auth/pull/7165/files#diff-142e7d6584eed63a73316fbc041fb93a0564a1cbb0da71200b92628ca66024b5
  */
-
-function convertToInsertAccount(rawAccount: AdapterAccount) {
-  const {
-    token_type,
-    access_token,
-    expires_at,
-    refresh_token,
-    session_state,
-    id_token,
-    ...rest
-  } = rawAccount;
-
-  const accountToInsert: NewAccount = {
-    ...rest,
-    tokenType: token_type,
-    accessToken: access_token,
-    expiresAt: expires_at,
-    refreshToken: refresh_token,
-    idToken: id_token,
-    sessionState: session_state,
-  };
-
-  return accountToInsert;
-}
-
 export function DrizzleAdapter(): Adapter {
   return {
     createUser: async (data) => {
@@ -187,7 +162,27 @@ export function DrizzleAdapter(): Adapter {
         .then((res) => res[0]);
     },
     linkAccount: async (rawAccount) => {
-      const accountToInsert = convertToInsertAccount(rawAccount);
+      console.log("link account");
+      const {
+        token_type,
+        access_token,
+        expires_at,
+        refresh_token,
+        session_state,
+        id_token,
+        ...rest
+      } = rawAccount;
+
+      const accountToInsert: NewAccount = {
+        ...rest,
+        tokenType: token_type,
+        accessToken: access_token,
+        expiresAt: expires_at,
+        refreshToken: refresh_token,
+        idToken: id_token,
+        sessionState: session_state,
+      };
+
       const updatedAccount = await db
         .insert(accounts)
         .values(accountToInsert)

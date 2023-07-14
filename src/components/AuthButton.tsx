@@ -15,7 +15,7 @@ const AuthButtonLogic = () => {
   return (
     <>
       {status === "unauthenticated" ? (
-        <button className="text-black" onClick={() => signIn("google")}>
+        <button className="text-black" onClick={() => signIn()}>
           Sign in
         </button>
       ) : null}

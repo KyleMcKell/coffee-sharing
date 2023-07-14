@@ -5,8 +5,9 @@ import NextAuth, {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import { AdapterAccount, type Adapter } from "next-auth/adapters";
+import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
 import { db } from "~/db";
 import { users } from "~/db/schema/users";
 import { sessions } from "~/db/schema/sessions";
@@ -55,6 +56,11 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.DISCORD_CLIENT_ID!,
       clientSecret: process.env.DISCORD_CLIENT_SECRET!,
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+
     /**
      * ...add more providers here.
      *
@@ -67,11 +73,6 @@ export const authOptions: NextAuthOptions = {
   ],
 };
 
-/**
- * Wrapper for `getServerSession` so that you don't need to import the `authOptions` in every file.
- *
- * @see https://next-auth.js.org/configuration/nextjs
- */
 export const getServerAuthSession = (ctx?: {
   req: GetServerSidePropsContext["req"];
   res: GetServerSidePropsContext["res"];
@@ -82,13 +83,6 @@ export const getServerAuthSession = (ctx?: {
   return getServerSession(authOptions);
 };
 
-/**
- * Adapter for Drizzle ORM. This is not yet available in NextAuth directly, so we inhouse our own.
- * When the official one is out, we will switch to that.
- *
- * @see
- * https://github.com/nextauthjs/next-auth/pull/7165/files#diff-142e7d6584eed63a73316fbc041fb93a0564a1cbb0da71200b92628ca66024b5
- */
 export function DrizzleAdapter(): Adapter {
   return {
     createUser: async (data) => {
@@ -163,6 +157,7 @@ export function DrizzleAdapter(): Adapter {
     },
     linkAccount: async (rawAccount) => {
       console.log("link account");
+      console.log("rawAccount", rawAccount);
       const {
         token_type,
         access_token,

@@ -12,6 +12,7 @@ import { relations } from "drizzle-orm";
 
 import { users } from "./users";
 
+// #TODO fix varchar for google, lol
 export const accounts = pgTable(
   "accounts",
   {

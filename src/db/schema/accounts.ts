@@ -10,14 +10,14 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-import { user } from "./user";
+import { users } from "./users";
 
-export const account = pgTable(
-  "account",
+export const accounts = pgTable(
+  "accounts",
   {
     userId: varchar("user_id", { length: 255 })
       .notNull()
-      .references(() => user.id),
+      .references(() => users.id),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccount["type"]>()
       .notNull(),
@@ -32,21 +32,22 @@ export const account = pgTable(
     scope: varchar("scope", { length: 255 }),
     idToken: varchar("id_token", { length: 255 }),
     sessionState: varchar("session_state", { length: 255 }),
-    refreshTokenExpiresIn: integer("refresh_token_expires_in"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (account) => {
     return {
       compoundKey: primaryKey(account.provider, account.providerAccountId),
+      userIdx: index("user_idx").on(account.userId),
     };
   }
 );
 
-export const accountsRelations = relations(account, ({ one }) => ({
-  user: one(user, {
-    fields: [account.userId],
-    references: [user.id],
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, {
+    fields: [accounts.userId],
+    references: [users.id],
   }),
 }));
 
-export type Account = InferModel<typeof account>;
+export type Account = InferModel<typeof accounts>;
+export type NewAccount = InferModel<typeof accounts, "insert">;

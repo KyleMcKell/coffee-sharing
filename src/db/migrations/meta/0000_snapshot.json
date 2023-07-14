@@ -1,11 +1,11 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "f8248e87-ca36-4ce0-9242-a7bf2b50934e",
+  "id": "0b5b447c-b0b9-4b13-a99a-16478af2a86a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "account": {
-      "name": "account",
+    "accounts": {
+      "name": "accounts",
       "schema": "",
       "columns": {
         "user_id": {
@@ -74,12 +74,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "refresh_token_expires_in": {
-          "name": "refresh_token_expires_in",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -88,12 +82,20 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_idx": {
+          "name": "user_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
-        "account_user_id_user_id_fk": {
-          "name": "account_user_id_user_id_fk",
-          "tableFrom": "account",
-          "tableTo": "user",
+        "accounts_user_id_users_id_fk": {
+          "name": "accounts_user_id_users_id_fk",
+          "tableFrom": "accounts",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -105,8 +107,8 @@
         }
       },
       "compositePrimaryKeys": {
-        "account_provider_provider_account_id": {
-          "name": "account_provider_provider_account_id",
+        "accounts_provider_provider_account_id": {
+          "name": "accounts_provider_provider_account_id",
           "columns": [
             "provider",
             "provider_account_id"
@@ -114,8 +116,8 @@
         }
       }
     },
-    "coffee_bean": {
-      "name": "coffee_bean",
+    "coffee_beans": {
+      "name": "coffee_beans",
       "schema": "",
       "columns": {
         "id": {
@@ -166,10 +168,10 @@
         }
       },
       "foreignKeys": {
-        "coffee_bean_barista_id_user_id_fk": {
-          "name": "coffee_bean_barista_id_user_id_fk",
-          "tableFrom": "coffee_bean",
-          "tableTo": "user",
+        "coffee_beans_barista_id_users_id_fk": {
+          "name": "coffee_beans_barista_id_users_id_fk",
+          "tableFrom": "coffee_beans",
+          "tableTo": "users",
           "columnsFrom": [
             "barista_id"
           ],
@@ -182,8 +184,8 @@
       },
       "compositePrimaryKeys": {}
     },
-    "coffee_bean_tasting_note": {
-      "name": "coffee_bean_tasting_note",
+    "coffee_beans_tasting_notes": {
+      "name": "coffee_beans_tasting_notes",
       "schema": "",
       "columns": {
         "id": {
@@ -229,10 +231,10 @@
         }
       },
       "foreignKeys": {
-        "coffee_bean_tasting_note_coffee_bean_id_coffee_bean_id_fk": {
-          "name": "coffee_bean_tasting_note_coffee_bean_id_coffee_bean_id_fk",
-          "tableFrom": "coffee_bean_tasting_note",
-          "tableTo": "coffee_bean",
+        "coffee_beans_tasting_notes_coffee_bean_id_coffee_beans_id_fk": {
+          "name": "coffee_beans_tasting_notes_coffee_bean_id_coffee_beans_id_fk",
+          "tableFrom": "coffee_beans_tasting_notes",
+          "tableTo": "coffee_beans",
           "columnsFrom": [
             "coffee_bean_id"
           ],
@@ -242,10 +244,10 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "coffee_bean_tasting_note_tasting_note_id_tasting_note_id_fk": {
-          "name": "coffee_bean_tasting_note_tasting_note_id_tasting_note_id_fk",
-          "tableFrom": "coffee_bean_tasting_note",
-          "tableTo": "tasting_note",
+        "coffee_beans_tasting_notes_tasting_note_id_tasting_notes_id_fk": {
+          "name": "coffee_beans_tasting_notes_tasting_note_id_tasting_notes_id_fk",
+          "tableFrom": "coffee_beans_tasting_notes",
+          "tableTo": "tasting_notes",
           "columnsFrom": [
             "tasting_note_id"
           ],
@@ -258,8 +260,8 @@
       },
       "compositePrimaryKeys": {}
     },
-    "session": {
-      "name": "session",
+    "sessions": {
+      "name": "sessions",
       "schema": "",
       "columns": {
         "session_token": {
@@ -300,8 +302,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
-    "tasting_note": {
-      "name": "tasting_note",
+    "tasting_notes": {
+      "name": "tasting_notes",
       "schema": "",
       "columns": {
         "id": {
@@ -332,10 +334,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "tasting_note_barista_id_user_id_fk": {
-          "name": "tasting_note_barista_id_user_id_fk",
-          "tableFrom": "tasting_note",
-          "tableTo": "user",
+        "tasting_notes_barista_id_users_id_fk": {
+          "name": "tasting_notes_barista_id_users_id_fk",
+          "tableFrom": "tasting_notes",
+          "tableTo": "users",
           "columnsFrom": [
             "barista_id"
           ],
@@ -348,8 +350,8 @@
       },
       "compositePrimaryKeys": {}
     },
-    "user": {
-      "name": "user",
+    "users": {
+      "name": "users",
       "schema": "",
       "columns": {
         "id": {
@@ -394,8 +396,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
-    "verification_token": {
-      "name": "verification_token",
+    "verification_tokens": {
+      "name": "verification_tokens",
       "schema": "",
       "columns": {
         "identifier": {
@@ -427,8 +429,8 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "verification_token_identifier_token": {
-          "name": "verification_token_identifier_token",
+        "verification_tokens_identifier_token": {
+          "name": "verification_tokens_identifier_token",
           "columns": [
             "identifier",
             "token"

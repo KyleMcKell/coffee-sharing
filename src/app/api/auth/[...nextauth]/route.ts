@@ -5,13 +5,13 @@ import NextAuth, {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import { type Adapter } from "next-auth/adapters";
+import { AdapterAccount, type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
 import { db } from "~/db";
-import { user } from "~/db/schema/user";
-import { session } from "~/db/schema/session";
-import { account } from "~/db/schema/account";
-import { verificationToken } from "~/db/schema/verificationToken";
+import { users } from "~/db/schema/users";
+import { sessions } from "~/db/schema/sessions";
+import { NewAccount, accounts } from "~/db/schema/accounts";
+import { verificationTokens } from "~/db/schema/verificationTokens";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -90,51 +90,75 @@ export const getServerAuthSession = (ctx?: {
  * https://github.com/nextauthjs/next-auth/pull/7165/files#diff-142e7d6584eed63a73316fbc041fb93a0564a1cbb0da71200b92628ca66024b5
  */
 
+function convertToInsertAccount(rawAccount: AdapterAccount) {
+  const {
+    token_type,
+    access_token,
+    expires_at,
+    refresh_token,
+    session_state,
+    id_token,
+    ...rest
+  } = rawAccount;
+
+  const accountToInsert: NewAccount = {
+    ...rest,
+    tokenType: token_type,
+    accessToken: access_token,
+    expiresAt: expires_at,
+    refreshToken: refresh_token,
+    idToken: id_token,
+    sessionState: session_state,
+  };
+
+  return accountToInsert;
+}
+
 export function DrizzleAdapter(): Adapter {
   return {
     createUser: async (data) => {
       console.log("create user");
       const id = crypto.randomUUID();
 
-      await db.insert(user).values({ ...data, id });
+      await db.insert(users).values({ ...data, id });
 
       const dbUser = await db
         .select()
-        .from(user)
-        .where(eq(user.id, id))
+        .from(users)
+        .where(eq(users.id, id))
         .then((res) => res[0]);
       return dbUser!;
     },
     getUser: async (data) => {
       console.log("get user");
-      const dbUser = await db.select().from(user).where(eq(user.id, data));
+      const dbUser = await db.select().from(users).where(eq(users.id, data));
       return dbUser[0] ?? null;
     },
     getUserByEmail: async (data) => {
       console.log("get user by email");
-      const dbUser = await db.select().from(user).where(eq(user.email, data));
+      const dbUser = await db.select().from(users).where(eq(users.email, data));
       return dbUser[0] ?? null;
     },
     createSession: async (data) => {
       console.log("create session");
-      await db.insert(session).values(data);
+      await db.insert(sessions).values(data);
 
       const dbSession = await db
         .select()
-        .from(session)
-        .where(eq(session.sessionToken, data.sessionToken));
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data.sessionToken));
       return dbSession[0]!;
     },
     getSessionAndUser: async (data) => {
       console.log("get session and user");
       const sessionAndUser = await db
         .select({
-          session: session,
-          user: user,
+          session: sessions,
+          user: users,
         })
-        .from(session)
-        .where(eq(session.sessionToken, data))
-        .innerJoin(user, eq(user.id, session.userId));
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data))
+        .innerJoin(users, eq(users.id, sessions.userId));
 
       return sessionAndUser[0] ?? null;
     },
@@ -144,29 +168,29 @@ export function DrizzleAdapter(): Adapter {
         throw new Error("No user id.");
       }
 
-      await db.update(user).set(data).where(eq(user.id, data.id));
+      await db.update(users).set(data).where(eq(users.id, data.id));
 
-      const dbUser = await db.select().from(user).where(eq(user.id, data.id));
+      const dbUser = await db.select().from(users).where(eq(users.id, data.id));
       return dbUser[0]!;
     },
     updateSession: async (data) => {
       console.log("update session");
       await db
-        .update(session)
+        .update(sessions)
         .set(data)
-        .where(eq(session.sessionToken, data.sessionToken));
+        .where(eq(sessions.sessionToken, data.sessionToken));
 
       return db
         .select()
-        .from(session)
-        .where(eq(session.sessionToken, data.sessionToken))
+        .from(sessions)
+        .where(eq(sessions.sessionToken, data.sessionToken))
         .then((res) => res[0]);
     },
     linkAccount: async (rawAccount) => {
-      console.log("link account");
+      const accountToInsert = convertToInsertAccount(rawAccount);
       const updatedAccount = await db
-        .insert(account)
-        .values(rawAccount)
+        .insert(accounts)
+        .values(accountToInsert)
         .returning()
         .then((res) => res[0]);
 
@@ -194,30 +218,30 @@ export function DrizzleAdapter(): Adapter {
       console.log("get user by account");
       const dbAccount = await db
         .select()
-        .from(account)
+        .from(accounts)
         .where(
           and(
-            eq(account.providerAccountId, a.providerAccountId),
-            eq(account.provider, a.provider)
+            eq(accounts.providerAccountId, a.providerAccountId),
+            eq(accounts.provider, a.provider)
           )
         )
-        .leftJoin(user, eq(account.userId, user.id))
+        .leftJoin(users, eq(accounts.userId, users.id))
         .then((res) => res[0]);
 
-      return dbAccount?.user ?? null;
+      return dbAccount?.users ?? null;
     },
     deleteSession: async (sessionToken) => {
       console.log("delete session");
-      await db.delete(session).where(eq(session.sessionToken, sessionToken));
+      await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken));
     },
     createVerificationToken: async (token) => {
       console.log("create verification token");
-      await db.insert(verificationToken).values(token);
+      await db.insert(verificationTokens).values(token);
 
       return db
         .select()
-        .from(verificationToken)
-        .where(eq(verificationToken.identifier, token.identifier))
+        .from(verificationTokens)
+        .where(eq(verificationTokens.identifier, token.identifier))
         .then((res) => res[0]);
     },
     useVerificationToken: async (token) => {
@@ -226,21 +250,21 @@ export function DrizzleAdapter(): Adapter {
         const deletedToken =
           (await db
             .select()
-            .from(verificationToken)
+            .from(verificationTokens)
             .where(
               and(
-                eq(verificationToken.identifier, token.identifier),
-                eq(verificationToken.token, token.token)
+                eq(verificationTokens.identifier, token.identifier),
+                eq(verificationTokens.token, token.token)
               )
             )
             .then((res) => res[0])) ?? null;
 
         await db
-          .delete(verificationToken)
+          .delete(verificationTokens)
           .where(
             and(
-              eq(verificationToken.identifier, token.identifier),
-              eq(verificationToken.token, token.token)
+              eq(verificationTokens.identifier, token.identifier),
+              eq(verificationTokens.token, token.token)
             )
           );
 
@@ -252,9 +276,9 @@ export function DrizzleAdapter(): Adapter {
     deleteUser: async (id) => {
       console.log("delete user");
       await Promise.all([
-        db.delete(user).where(eq(user.id, id)),
-        db.delete(session).where(eq(session.userId, id)),
-        db.delete(account).where(eq(account.userId, id)),
+        db.delete(users).where(eq(users.id, id)),
+        db.delete(sessions).where(eq(sessions.userId, id)),
+        db.delete(accounts).where(eq(accounts.userId, id)),
       ]);
 
       return null;
@@ -262,11 +286,11 @@ export function DrizzleAdapter(): Adapter {
     unlinkAccount: async (a) => {
       console.log("unlink account");
       await db
-        .delete(account)
+        .delete(accounts)
         .where(
           and(
-            eq(account.providerAccountId, a.providerAccountId),
-            eq(account.provider, a.provider)
+            eq(accounts.providerAccountId, a.providerAccountId),
+            eq(accounts.provider, a.provider)
           )
         );
 

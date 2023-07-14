@@ -7,16 +7,16 @@ import {
   index,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { user } from "./user";
-import { coffeeBeanTastingNote } from "./coffeeBeanTastingNote";
+import { users } from "./users";
+import { coffeeBeansTastingNotes } from "./coffeeBeansTastingNotes";
 
-export const coffeeBean = pgTable(
-  "coffee_bean",
+export const coffeeBeans = pgTable(
+  "coffee_beans",
   {
     id: uuid("id").notNull().primaryKey(),
     baristaId: varchar("barista_id", { length: 255 })
       .notNull()
-      .references(() => user.id),
+      .references(() => users.id),
     name: varchar("name", { length: 255 }).notNull(),
     brand: varchar("brand", { length: 255 }),
     tastingNotes: json("taste_notes").$type<string[]>(),
@@ -29,10 +29,10 @@ export const coffeeBean = pgTable(
   }
 );
 
-export const coffeeBeansRelations = relations(coffeeBean, ({ one, many }) => ({
-  barista: one(user, {
-    fields: [coffeeBean.baristaId],
-    references: [user.id],
+export const coffeeBeansRelations = relations(coffeeBeans, ({ one, many }) => ({
+  barista: one(users, {
+    fields: [coffeeBeans.baristaId],
+    references: [users.id],
   }),
-  coffeeBeansToTastingNotes: many(coffeeBeanTastingNote),
+  coffeeBeansToTastingNotes: many(coffeeBeansTastingNotes),
 }));

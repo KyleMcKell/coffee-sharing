@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "pg",
-  "id": "cdab8b63-8893-42db-9027-c5f435059f4e",
+  "id": "f8248e87-ca36-4ce0-9242-a7bf2b50934e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "account": {
@@ -89,11 +89,28 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "account_user_id_user_id_fk": {
+          "name": "account_user_id_user_id_fk",
+          "tableFrom": "account",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {
         "account_provider_provider_account_id": {
           "name": "account_provider_provider_account_id",
-          "columns": ["provider", "provider_account_id"]
+          "columns": [
+            "provider",
+            "provider_account_id"
+          ]
         }
       }
     },
@@ -139,8 +156,30 @@
           "default": "now()"
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "barista_idx": {
+          "name": "barista_idx",
+          "columns": [
+            "barista_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "coffee_bean_barista_id_user_id_fk": {
+          "name": "coffee_bean_barista_id_user_id_fk",
+          "tableFrom": "coffee_bean",
+          "tableTo": "user",
+          "columnsFrom": [
+            "barista_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {}
     },
     "coffee_bean_tasting_note": {
@@ -173,14 +212,33 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "coffee_bean_idx": {
+          "name": "coffee_bean_idx",
+          "columns": [
+            "coffee_bean_id"
+          ],
+          "isUnique": false
+        },
+        "tasting_note_idx": {
+          "name": "tasting_note_idx",
+          "columns": [
+            "tasting_note_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {
         "coffee_bean_tasting_note_coffee_bean_id_coffee_bean_id_fk": {
           "name": "coffee_bean_tasting_note_coffee_bean_id_coffee_bean_id_fk",
           "tableFrom": "coffee_bean_tasting_note",
           "tableTo": "coffee_bean",
-          "columnsFrom": ["coffee_bean_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "coffee_bean_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -188,8 +246,12 @@
           "name": "coffee_bean_tasting_note_tasting_note_id_tasting_note_id_fk",
           "tableFrom": "coffee_bean_tasting_note",
           "tableTo": "tasting_note",
-          "columnsFrom": ["tasting_note_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "tasting_note_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -226,7 +288,15 @@
           "default": "now()"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "user_idx": {
+          "name": "user_idx",
+          "columns": [
+            "user_id"
+          ],
+          "isUnique": false
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {}
     },
@@ -261,7 +331,21 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "tasting_note_barista_id_user_id_fk": {
+          "name": "tasting_note_barista_id_user_id_fk",
+          "tableFrom": "tasting_note",
+          "tableTo": "user",
+          "columnsFrom": [
+            "barista_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {}
     },
     "user": {
@@ -345,7 +429,10 @@
       "compositePrimaryKeys": {
         "verification_token_identifier_token": {
           "name": "verification_token_identifier_token",
-          "columns": ["identifier", "token"]
+          "columns": [
+            "identifier",
+            "token"
+          ]
         }
       }
     }

@@ -1,6 +1,5 @@
-import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-
+import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const sessions = pgTable(
@@ -17,7 +16,7 @@ export const sessions = pgTable(
     return {
       userIdx: index("user_idx").on(session.userId),
     };
-  }
+  },
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

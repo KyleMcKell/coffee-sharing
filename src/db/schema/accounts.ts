@@ -1,15 +1,14 @@
-import { InferModel } from "drizzle-orm";
-import { type AdapterAccount } from "next-auth/adapters";
+import { InferModel, relations } from "drizzle-orm";
 import {
+  index,
+  integer,
   pgTable,
   primaryKey,
-  integer,
-  varchar,
   timestamp,
-  index,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { type AdapterAccount } from "next-auth/adapters";
 import { users } from "./users";
 
 // #TODO fix varchar for google, lol
@@ -40,7 +39,7 @@ export const accounts = pgTable(
       compoundKey: primaryKey(account.provider, account.providerAccountId),
       userIdx: index("user_idx").on(account.userId),
     };
-  }
+  },
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -49,6 +48,9 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const selectAccountSchema = createSelectSchema(accounts);
+export const insertAccountSchema = createInsertSchema(accounts);
 
 export type Account = InferModel<typeof accounts>;
 export type NewAccount = InferModel<typeof accounts, "insert">;

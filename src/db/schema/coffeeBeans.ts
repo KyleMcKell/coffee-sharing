@@ -1,14 +1,14 @@
+import { relations } from "drizzle-orm";
 import {
+  index,
+  json,
   pgTable,
-  varchar,
   timestamp,
   uuid,
-  json,
-  index,
+  varchar,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
-import { users } from "./users";
 import { coffeeBeansTastingNotes } from "./coffeeBeansTastingNotes";
+import { users } from "./users";
 
 export const coffeeBeans = pgTable(
   "coffee_beans",
@@ -26,7 +26,7 @@ export const coffeeBeans = pgTable(
     return {
       baristaIdx: index("barista_idx").on(coffeeBean.baristaId),
     };
-  }
+  },
 );
 
 export const coffeeBeansRelations = relations(coffeeBeans, ({ one, many }) => ({

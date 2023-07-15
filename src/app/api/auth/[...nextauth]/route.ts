@@ -1,19 +1,18 @@
+import { db } from "~/db";
+import { accounts, type NewAccount } from "~/db/schema/accounts";
+import { sessions } from "~/db/schema/sessions";
+import { users } from "~/db/schema/users";
+import { verificationTokens } from "~/db/schema/verificationTokens";
+import { env } from "~/utils/env.mjs";
 import { and, eq } from "drizzle-orm";
 import { type GetServerSidePropsContext } from "next";
 import NextAuth, {
   getServerSession,
-  type NextAuthOptions,
   type DefaultSession,
+  type NextAuthOptions,
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
-import GoogleProvider from "next-auth/providers/google";
-import { db } from "~/db";
-import { users } from "~/db/schema/users";
-import { sessions } from "~/db/schema/sessions";
-import { accounts, type NewAccount } from "~/db/schema/accounts";
-import { verificationTokens } from "~/db/schema/verificationTokens";
-import { env } from "~/utils/env.mjs";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -44,10 +43,10 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
-    }),
+    // GoogleProvider({
+    //   clientId: env.GOOGLE_CLIENT_ID,
+    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
+    // }),
   ],
 };
 
@@ -189,8 +188,8 @@ export function DrizzleAdapter(): Adapter {
         .where(
           and(
             eq(accounts.providerAccountId, a.providerAccountId),
-            eq(accounts.provider, a.provider)
-          )
+            eq(accounts.provider, a.provider),
+          ),
         )
         .leftJoin(users, eq(accounts.userId, users.id))
         .then((res) => res[0]);
@@ -221,8 +220,8 @@ export function DrizzleAdapter(): Adapter {
             .where(
               and(
                 eq(verificationTokens.identifier, token.identifier),
-                eq(verificationTokens.token, token.token)
-              )
+                eq(verificationTokens.token, token.token),
+              ),
             )
             .then((res) => res[0])) ?? null;
 
@@ -231,8 +230,8 @@ export function DrizzleAdapter(): Adapter {
           .where(
             and(
               eq(verificationTokens.identifier, token.identifier),
-              eq(verificationTokens.token, token.token)
-            )
+              eq(verificationTokens.token, token.token),
+            ),
           );
 
         return deletedToken;
@@ -257,8 +256,8 @@ export function DrizzleAdapter(): Adapter {
         .where(
           and(
             eq(accounts.providerAccountId, a.providerAccountId),
-            eq(accounts.provider, a.provider)
-          )
+            eq(accounts.provider, a.provider),
+          ),
         );
 
       return undefined;

@@ -1,5 +1,5 @@
-import { index, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
+import { index, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 import { coffeeBeans } from "./coffeeBeans";
 import { tastingNotes } from "./tastingNotes";
 
@@ -20,7 +20,7 @@ export const coffeeBeansTastingNotes = pgTable(
       coffeeBeanIdx: index("coffee_bean_idx").on(cbtn.coffeeBeanId),
       tastingNoteIdx: index("tasting_note_idx").on(cbtn.tastingNoteId),
     };
-  }
+  },
 );
 
 export const coffeeBeansToTastingNotesRelations = relations(
@@ -34,5 +34,5 @@ export const coffeeBeansToTastingNotesRelations = relations(
       fields: [coffeeBeansTastingNotes.tastingNoteId],
       references: [tastingNotes.id],
     }),
-  })
+  }),
 );

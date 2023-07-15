@@ -29,7 +29,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/utils/env.mjs"
+    "src/utils/env.mjs",
+    ".eslintrc.cjs",
+    ".prettierrc.cjs"
   ],
   "exclude": ["node_modules"]
 }

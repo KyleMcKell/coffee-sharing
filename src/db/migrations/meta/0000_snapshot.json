@@ -85,9 +85,7 @@
       "indexes": {
         "user_idx": {
           "name": "user_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -96,12 +94,8 @@
           "name": "accounts_user_id_users_id_fk",
           "tableFrom": "accounts",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -109,10 +103,7 @@
       "compositePrimaryKeys": {
         "accounts_provider_provider_account_id": {
           "name": "accounts_provider_provider_account_id",
-          "columns": [
-            "provider",
-            "provider_account_id"
-          ]
+          "columns": ["provider", "provider_account_id"]
         }
       }
     },
@@ -161,9 +152,7 @@
       "indexes": {
         "barista_idx": {
           "name": "barista_idx",
-          "columns": [
-            "barista_id"
-          ],
+          "columns": ["barista_id"],
           "isUnique": false
         }
       },
@@ -172,12 +161,8 @@
           "name": "coffee_beans_barista_id_users_id_fk",
           "tableFrom": "coffee_beans",
           "tableTo": "users",
-          "columnsFrom": [
-            "barista_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["barista_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -217,16 +202,12 @@
       "indexes": {
         "coffee_bean_idx": {
           "name": "coffee_bean_idx",
-          "columns": [
-            "coffee_bean_id"
-          ],
+          "columns": ["coffee_bean_id"],
           "isUnique": false
         },
         "tasting_note_idx": {
           "name": "tasting_note_idx",
-          "columns": [
-            "tasting_note_id"
-          ],
+          "columns": ["tasting_note_id"],
           "isUnique": false
         }
       },
@@ -235,12 +216,8 @@
           "name": "coffee_beans_tasting_notes_coffee_bean_id_coffee_beans_id_fk",
           "tableFrom": "coffee_beans_tasting_notes",
           "tableTo": "coffee_beans",
-          "columnsFrom": [
-            "coffee_bean_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["coffee_bean_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -248,12 +225,8 @@
           "name": "coffee_beans_tasting_notes_tasting_note_id_tasting_notes_id_fk",
           "tableFrom": "coffee_beans_tasting_notes",
           "tableTo": "tasting_notes",
-          "columnsFrom": [
-            "tasting_note_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["tasting_note_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -293,9 +266,7 @@
       "indexes": {
         "user_idx": {
           "name": "user_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -338,12 +309,8 @@
           "name": "tasting_notes_barista_id_users_id_fk",
           "tableFrom": "tasting_notes",
           "tableTo": "users",
-          "columnsFrom": [
-            "barista_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["barista_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -431,10 +398,7 @@
       "compositePrimaryKeys": {
         "verification_tokens_identifier_token": {
           "name": "verification_tokens_identifier_token",
-          "columns": [
-            "identifier",
-            "token"
-          ]
+          "columns": ["identifier", "token"]
         }
       }
     }

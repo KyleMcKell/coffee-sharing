@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
+
 import { coffeeBeans } from "./coffeeBeans";
 import { tastingNotes } from "./tastingNotes";
 

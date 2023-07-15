@@ -4,11 +4,13 @@ import {
   integer,
   pgTable,
   primaryKey,
+  text,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
+
 import { users } from "./users";
 
 // #TODO fix varchar for google, lol
@@ -25,8 +27,8 @@ export const accounts = pgTable(
     providerAccountId: varchar("provider_account_id", {
       length: 255,
     }).notNull(),
-    refreshToken: varchar("refresh_token", { length: 255 }),
-    accessToken: varchar("access_token", { length: 255 }),
+    refreshToken: text("refresh_token"),
+    accessToken: text("access_token"),
     expiresAt: integer("expires_at"),
     tokenType: varchar("token_type", { length: 255 }),
     scope: varchar("scope", { length: 255 }),

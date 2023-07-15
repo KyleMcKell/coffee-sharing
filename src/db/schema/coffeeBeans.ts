@@ -7,6 +7,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+
 import { coffeeBeansTastingNotes } from "./coffeeBeansTastingNotes";
 import { users } from "./users";
 

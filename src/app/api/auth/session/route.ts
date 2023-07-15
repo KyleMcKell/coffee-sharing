@@ -1,6 +1,7 @@
-import { getServerAuthSession } from "~/app/api/auth/[...nextauth]/route";
 import { NextApiHandler } from "next";
 import { NextResponse } from "next/server";
+
+import { getServerAuthSession } from "~/app/api/auth/[...nextauth]/route";
 
 export const GET: NextApiHandler = async () => {
   const session = await getServerAuthSession();

@@ -1,9 +1,3 @@
-import { db } from "~/db";
-import { accounts, type NewAccount } from "~/db/schema/accounts";
-import { sessions } from "~/db/schema/sessions";
-import { users } from "~/db/schema/users";
-import { verificationTokens } from "~/db/schema/verificationTokens";
-import { env } from "~/utils/env.mjs";
 import { and, eq } from "drizzle-orm";
 import { type GetServerSidePropsContext } from "next";
 import NextAuth, {
@@ -13,6 +7,14 @@ import NextAuth, {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import DiscordProvider from "next-auth/providers/discord";
+import GoogleProvider from "next-auth/providers/google";
+
+import { db } from "~/db";
+import { accounts, type NewAccount } from "~/db/schema/accounts";
+import { sessions } from "~/db/schema/sessions";
+import { users } from "~/db/schema/users";
+import { verificationTokens } from "~/db/schema/verificationTokens";
+import { env } from "~/utils/env.mjs";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -43,10 +45,10 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_CLIENT_ID,
-    //   clientSecret: env.GOOGLE_CLIENT_SECRET,
-    // }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
 };
 

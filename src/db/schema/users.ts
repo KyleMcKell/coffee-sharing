@@ -1,5 +1,6 @@
 import { InferModel, relations } from "drizzle-orm";
 import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
+
 import { accounts } from "./accounts";
 import { coffeeBeans } from "./coffeeBeans";
 

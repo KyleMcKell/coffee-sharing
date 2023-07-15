@@ -148,11 +148,9 @@ export function DrizzleAdapter(): Adapter {
         sessionState: session_state,
       };
 
-      const account = insertAccountSchema.parse(accountToInsert);
-
       const updatedAccount = await db
         .insert(accounts)
-        .values(account)
+        .values(accountToInsert)
         .returning()
         .then((res) => res[0]);
 

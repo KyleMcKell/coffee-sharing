@@ -10,7 +10,11 @@ import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 
 import { db } from "~/db";
-import { accounts, type NewAccount } from "~/db/schema/accounts";
+import {
+  accounts,
+  insertAccountSchema,
+  type NewAccount,
+} from "~/db/schema/accounts";
 import { sessions } from "~/db/schema/sessions";
 import { users } from "~/db/schema/users";
 import { verificationTokens } from "~/db/schema/verificationTokens";
@@ -65,7 +69,6 @@ export const getServerAuthSession = (ctx?: {
 export function DrizzleAdapter(): Adapter {
   return {
     createUser: async (data) => {
-      console.log("create user");
       const id = crypto.randomUUID();
 
       await db.insert(users).values({ ...data, id });
@@ -78,17 +81,14 @@ export function DrizzleAdapter(): Adapter {
       return dbUser!;
     },
     getUser: async (data) => {
-      console.log("get user");
       const dbUser = await db.select().from(users).where(eq(users.id, data));
       return dbUser[0] ?? null;
     },
     getUserByEmail: async (data) => {
-      console.log("get user by email");
       const dbUser = await db.select().from(users).where(eq(users.email, data));
       return dbUser[0] ?? null;
     },
     createSession: async (data) => {
-      console.log("create session");
       await db.insert(sessions).values(data);
 
       const dbSession = await db
@@ -98,7 +98,6 @@ export function DrizzleAdapter(): Adapter {
       return dbSession[0]!;
     },
     getSessionAndUser: async (data) => {
-      console.log("get session and user");
       const sessionAndUser = await db
         .select({
           session: sessions,
@@ -111,7 +110,6 @@ export function DrizzleAdapter(): Adapter {
       return sessionAndUser[0] ?? null;
     },
     updateUser: async (data) => {
-      console.log("update user");
       if (!data.id) {
         throw new Error("No user id.");
       }
@@ -122,7 +120,6 @@ export function DrizzleAdapter(): Adapter {
       return dbUser[0]!;
     },
     updateSession: async (data) => {
-      console.log("update session");
       await db
         .update(sessions)
         .set(data)
@@ -135,7 +132,6 @@ export function DrizzleAdapter(): Adapter {
         .then((res) => res[0]);
     },
     linkAccount: async (rawAccount) => {
-      console.log("link account");
       const {
         token_type,
         access_token,
@@ -146,7 +142,7 @@ export function DrizzleAdapter(): Adapter {
         ...rest
       } = rawAccount;
 
-      const accountToInsert: NewAccount = {
+      const accountToInsert = {
         ...rest,
         tokenType: token_type,
         accessToken: access_token,
@@ -156,14 +152,15 @@ export function DrizzleAdapter(): Adapter {
         sessionState: session_state,
       };
 
+      const account = insertAccountSchema.parse(accountToInsert);
+
       const updatedAccount = await db
         .insert(accounts)
-        .values(accountToInsert)
+        .values(account)
         .returning()
         .then((res) => res[0]);
 
       if (!updatedAccount) {
-        console.log("no account");
         return;
       }
 
@@ -183,7 +180,6 @@ export function DrizzleAdapter(): Adapter {
       return fixedAccount;
     },
     getUserByAccount: async (a) => {
-      console.log("get user by account");
       const dbAccount = await db
         .select()
         .from(accounts)
@@ -199,11 +195,9 @@ export function DrizzleAdapter(): Adapter {
       return dbAccount?.users ?? null;
     },
     deleteSession: async (sessionToken) => {
-      console.log("delete session");
       await db.delete(sessions).where(eq(sessions.sessionToken, sessionToken));
     },
     createVerificationToken: async (token) => {
-      console.log("create verification token");
       await db.insert(verificationTokens).values(token);
 
       return db
@@ -213,7 +207,6 @@ export function DrizzleAdapter(): Adapter {
         .then((res) => res[0]);
     },
     useVerificationToken: async (token) => {
-      console.log("use verification token");
       try {
         const deletedToken =
           (await db
@@ -242,7 +235,6 @@ export function DrizzleAdapter(): Adapter {
       }
     },
     deleteUser: async (id) => {
-      console.log("delete user");
       await Promise.all([
         db.delete(users).where(eq(users.id, id)),
         db.delete(sessions).where(eq(sessions.userId, id)),
@@ -252,7 +244,6 @@ export function DrizzleAdapter(): Adapter {
       return null;
     },
     unlinkAccount: async (a) => {
-      console.log("unlink account");
       await db
         .delete(accounts)
         .where(

@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
+import z from "zod";
 
 import { users } from "./users";
 
@@ -48,8 +49,9 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
   }),
 }));
 
-export const selectAccountSchema = createSelectSchema(accounts);
-export const insertAccountSchema = createInsertSchema(accounts);
+export const insertAccountSchema = createInsertSchema(accounts, {
+  type: z.enum(["oauth", "email", "credentials"]),
+});
 
 export type Account = InferModel<typeof accounts>;
 export type NewAccount = InferModel<typeof accounts, "insert">;

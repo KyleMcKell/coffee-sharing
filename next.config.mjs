@@ -1,8 +1,10 @@
+import "./src/utils/env.mjs";
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
   images: {
     domains: ["pbs.twimg.com"],
   },
 };
 
-module.exports = nextConfig;
+export default config;

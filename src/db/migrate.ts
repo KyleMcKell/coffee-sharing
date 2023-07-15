@@ -2,11 +2,11 @@ import { sql } from "@vercel/postgres";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 
-import "dotenv/config";
+import { env } from "../utils/env.mjs";
 
 // inspired by Raphael Moreau @rphlmr for Postgres, extended for Planetscale
 const runMigrate = async () => {
-  if (!process.env.POSTGRES_URL) {
+  if (!env.POSTGRES_URL) {
     throw new Error("POSTGRES_URL is not defined");
   }
 

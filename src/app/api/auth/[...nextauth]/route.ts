@@ -10,11 +10,7 @@ import DiscordProvider from "next-auth/providers/discord";
 import GoogleProvider from "next-auth/providers/google";
 
 import { db } from "~/db";
-import {
-  accounts,
-  insertAccountSchema,
-  type NewAccount,
-} from "~/db/schema/accounts";
+import { accounts, insertAccountSchema } from "~/db/schema/accounts";
 import { sessions } from "~/db/schema/sessions";
 import { users } from "~/db/schema/users";
 import { verificationTokens } from "~/db/schema/verificationTokens";

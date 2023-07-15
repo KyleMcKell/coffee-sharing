@@ -5,7 +5,7 @@ import "dotenv/config";
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.enum(["development", "test", "production"]),
+    NODE_ENV: z.enum(["development", "test", "production"]).optional(),
     POSTGRES_URL: z.string().url(),
     POSTGRES_PRISMA_URL: z.string().min(1),
     POSTGRES_URL_NON_POOLING: z.string().min(1),

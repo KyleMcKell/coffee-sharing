@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "next lint",
     "migration:generate": "drizzle-kit generate:pg",
-    "migration:push": "node -r esbuild-register src/db/migrate.ts",
+    "migration:push": "node --no-warnings --loader esbuild-register/loader -r esbuild-register src/db/migrate.ts",
     "migration:drop": "drizzle-kit drop --config=drizzle.config.ts",
     "prettier:write": "prettier --write ."
   },
@@ -43,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "drizzle-kit": "^0.19.3",
+    "esbuild": "^0.18.13",
     "esbuild-register": "^3.4.2",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.7",

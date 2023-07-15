@@ -14,7 +14,7 @@ import { accounts, type NewAccount } from "~/db/schema/accounts";
 import { sessions } from "~/db/schema/sessions";
 import { users } from "~/db/schema/users";
 import { verificationTokens } from "~/db/schema/verificationTokens";
-import { env } from "~/utils/env.mjs";
+import { env } from "~/utils/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {

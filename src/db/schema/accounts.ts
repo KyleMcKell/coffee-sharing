@@ -13,7 +13,6 @@ import { type AdapterAccount } from "next-auth/adapters";
 
 import { users } from "./users";
 
-// #TODO fix varchar for google, lol
 export const accounts = pgTable(
   "accounts",
   {
@@ -24,15 +23,13 @@ export const accounts = pgTable(
       .$type<AdapterAccount["type"]>()
       .notNull(),
     provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("provider_account_id", {
-      length: 255,
-    }).notNull(),
+    providerAccountId: text("provider_account_id").notNull(),
     refreshToken: text("refresh_token"),
     accessToken: text("access_token"),
     expiresAt: integer("expires_at"),
     tokenType: varchar("token_type", { length: 255 }),
-    scope: varchar("scope", { length: 255 }),
-    idToken: varchar("id_token", { length: 255 }),
+    scope: text("scope"),
+    idToken: text("id_token"),
     sessionState: varchar("session_state", { length: 255 }),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },

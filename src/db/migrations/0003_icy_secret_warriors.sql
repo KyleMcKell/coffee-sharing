@@ -1,0 +1,1 @@
+ALTER TABLE "accounts" ALTER COLUMN "scope" SET DATA TYPE text;

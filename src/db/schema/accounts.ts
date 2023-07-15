@@ -12,14 +12,14 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import z from "zod";
 
-import { users } from "./users";
+import { usersTable } from "./users";
 
-export const accounts = pgTable(
+export const accountsTable = pgTable(
   "accounts",
   {
     userId: varchar("user_id", { length: 255 })
       .notNull()
-      .references(() => users.id),
+      .references(() => usersTable.id),
     type: varchar("type", { length: 255 })
       .$type<AdapterAccount["type"]>()
       .notNull(),
@@ -42,16 +42,16 @@ export const accounts = pgTable(
   },
 );
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
+export const accountsRelations = relations(accountsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [accountsTable.userId],
+    references: [usersTable.id],
   }),
 }));
 
-export const insertAccountSchema = createInsertSchema(accounts, {
+export const insertAccountSchema = createInsertSchema(accountsTable, {
   type: z.enum(["oauth", "email", "credentials"]),
 });
 
-export type Account = InferModel<typeof accounts>;
-export type NewAccount = InferModel<typeof accounts, "insert">;
+export type Account = InferModel<typeof accountsTable>;
+export type NewAccount = InferModel<typeof accountsTable, "insert">;

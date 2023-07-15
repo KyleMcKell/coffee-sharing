@@ -1,25 +1,25 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { coffeeBeansTastingNotes } from "./coffeeBeansTastingNotes";
-import { users } from "./users";
+import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
+import { usersTable } from "./users";
 
-export const tastingNotes = pgTable("tasting_notes", {
+export const tastingNotesTable = pgTable("tasting_notes", {
   id: uuid("id").notNull().primaryKey(),
   note: varchar("name", { length: 255 }).notNull(),
   baristaId: varchar("barista_id", { length: 255 })
     .notNull()
-    .references(() => users.id),
+    .references(() => usersTable.id),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
 export const tastingNoteRelations = relations(
-  tastingNotes,
+  tastingNotesTable,
   ({ one, many }) => ({
-    barista: one(users, {
-      fields: [tastingNotes.baristaId],
-      references: [users.id],
+    barista: one(usersTable, {
+      fields: [tastingNotesTable.baristaId],
+      references: [usersTable.id],
     }),
-    coffeeBeansToTastingNotes: many(coffeeBeansTastingNotes),
+    coffeeBeansToTastingNotes: many(coffeeBeansTastingNotesTable),
   }),
 );

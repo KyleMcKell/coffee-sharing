@@ -1,19 +1,19 @@
 import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import { coffeeBeans } from "./coffeeBeans";
-import { tastingNotes } from "./tastingNotes";
+import { coffeeBeansTable } from "./coffeeBeans";
+import { tastingNotesTable } from "./tastingNotes";
 
-export const coffeeBeansTastingNotes = pgTable(
+export const coffeeBeansTastingNotesTable = pgTable(
   "coffee_beans_tasting_notes",
   {
     id: uuid("id").notNull().primaryKey(),
     coffeeBeanId: uuid("coffee_bean_id")
       .notNull()
-      .references(() => coffeeBeans.id),
+      .references(() => coffeeBeansTable.id),
     tastingNoteId: uuid("tasting_note_id")
       .notNull()
-      .references(() => tastingNotes.id),
+      .references(() => tastingNotesTable.id),
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (cbtn) => {
@@ -25,15 +25,15 @@ export const coffeeBeansTastingNotes = pgTable(
 );
 
 export const coffeeBeansToTastingNotesRelations = relations(
-  coffeeBeansTastingNotes,
+  coffeeBeansTastingNotesTable,
   ({ one }) => ({
-    coffeeBean: one(coffeeBeans, {
-      fields: [coffeeBeansTastingNotes.coffeeBeanId],
-      references: [coffeeBeans.id],
+    coffeeBean: one(coffeeBeansTable, {
+      fields: [coffeeBeansTastingNotesTable.coffeeBeanId],
+      references: [coffeeBeansTable.id],
     }),
-    tastingNotes: one(tastingNotes, {
-      fields: [coffeeBeansTastingNotes.tastingNoteId],
-      references: [tastingNotes.id],
+    tastingNotes: one(tastingNotesTable, {
+      fields: [coffeeBeansTastingNotesTable.tastingNoteId],
+      references: [tastingNotesTable.id],
     }),
   }),
 );

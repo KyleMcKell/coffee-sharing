@@ -1,9 +1,9 @@
 import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
-import { users } from "./users";
+import { usersTable } from "./users";
 
-export const sessions = pgTable(
+export const sessionsTable = pgTable(
   "sessions",
   {
     sessionToken: varchar("session_token", { length: 255 })
@@ -20,9 +20,9 @@ export const sessions = pgTable(
   },
 );
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
+export const sessionsRelations = relations(sessionsTable, ({ one }) => ({
+  user: one(usersTable, {
+    fields: [sessionsTable.userId],
+    references: [usersTable.id],
   }),
 }));

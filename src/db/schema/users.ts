@@ -1,10 +1,10 @@
 import { InferModel, relations } from "drizzle-orm";
 import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
-import { accounts } from "./accounts";
-import { coffeeBeans } from "./coffeeBeans";
+import { accountsTable } from "./accounts";
+import { coffeeBeansTable } from "./coffeeBeans";
 
-export const users = pgTable("users", {
+export const usersTable = pgTable("users", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
@@ -13,10 +13,10 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  coffeeBeans: many(coffeeBeans),
+export const usersRelations = relations(usersTable, ({ many }) => ({
+  accounts: many(accountsTable),
+  coffeeBeans: many(coffeeBeansTable),
 }));
 
-export type User = InferModel<typeof users>;
-export type NewUser = InferModel<typeof users, "insert">;
+export type User = InferModel<typeof usersTable>;
+export type NewUser = InferModel<typeof usersTable, "insert">;

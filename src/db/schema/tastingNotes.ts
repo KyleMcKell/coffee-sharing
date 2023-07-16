@@ -1,8 +1,8 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
-import { usersTable } from "./users";
+import { coffeeBeansTastingNotesTable } from "~/db/schema/coffeeBeansTastingNotes";
+import { usersTable } from "~/db/schema/users";
 
 export const tastingNotesTable = pgTable("tasting_notes", {
   id: uuid("id").notNull().primaryKey(),

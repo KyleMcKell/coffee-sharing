@@ -2,6 +2,8 @@
 
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 
+import { Button } from "~/components/ui/button";
+
 export const AuthButton = () => {
   return (
     <SessionProvider>
@@ -16,15 +18,11 @@ const AuthButtonLogic = () => {
   return (
     <>
       {status === "unauthenticated" ? (
-        <button className="text-black" onClick={() => signIn()}>
-          Sign in
-        </button>
+        <Button onClick={() => signIn()}>Sign in</Button>
       ) : null}
       {status === "authenticated" ? (
         <>
-          <button className="text-black" onClick={() => signOut()}>
-            Sign out
-          </button>
+          <Button onClick={() => signOut()}>Sign out</Button>
           {data.user?.name}
         </>
       ) : null}

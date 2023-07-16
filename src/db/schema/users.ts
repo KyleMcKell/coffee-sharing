@@ -1,8 +1,8 @@
 import { InferModel, relations } from "drizzle-orm";
-import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
-import { accountsTable } from "./accounts";
-import { coffeeBeansTable } from "./coffeeBeans";
+import { accountsTable } from "~/db/schema/accounts";
+import { coffeeBeansTable } from "~/db/schema/coffeeBeans";
 
 export const usersTable = pgTable("users", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),

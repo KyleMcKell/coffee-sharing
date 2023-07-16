@@ -12,7 +12,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import z from "zod";
 
-import { usersTable } from "./users";
+import { usersTable } from "~/db/schema/users";
 
 export const accountsTable = pgTable(
   "accounts",

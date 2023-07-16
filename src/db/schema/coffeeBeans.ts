@@ -8,8 +8,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
-import { usersTable } from "./users";
+import { coffeeBeansTastingNotesTable } from "~/db/schema/coffeeBeansTastingNotes";
+import { usersTable } from "~/db/schema/users";
 
 export const coffeeBeansTable = pgTable(
   "coffee_beans",

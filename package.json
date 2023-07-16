@@ -16,6 +16,7 @@
     "prettier:write": "prettier --write ."
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.0.2",
     "@t3-oss/env-nextjs": "^0.6.0",
     "@vercel/postgres": "0.4.0",
     "autoprefixer": "10.4.14",

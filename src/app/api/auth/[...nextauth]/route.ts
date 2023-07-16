@@ -14,7 +14,7 @@ import { accountsTable } from "~/db/schema/accounts";
 import { sessionsTable } from "~/db/schema/sessions";
 import { usersTable } from "~/db/schema/users";
 import { verificationTokensTable } from "~/db/schema/verificationTokens";
-import { env } from "~/utils/env";
+import { env } from "~/lib/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {

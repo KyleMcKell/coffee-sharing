@@ -1,4 +1,4 @@
-import "./src/utils/env.js";
+import "./src/lib/env.js";
 
 /** @type {import('next').NextConfig} */
 const config = {

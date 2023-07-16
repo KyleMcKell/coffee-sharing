@@ -4,9 +4,8 @@ import { AuthButton } from "~/components/AuthButton";
 
 import { authOptions } from "./api/auth/[...nextauth]/route";
 
-const Home = async () => {
+export default async function Home() {
   const session = await getServerSession(authOptions);
-  console.log("session from home", session);
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center">
@@ -14,6 +13,4 @@ const Home = async () => {
       <AuthButton />
     </main>
   );
-};
-
-export default Home;
+}

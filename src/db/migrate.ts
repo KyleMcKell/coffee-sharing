@@ -2,7 +2,7 @@ import { sql } from "@vercel/postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 
-import { env } from "../utils/env.js";
+import { env } from "../lib/env.js/index.js";
 
 // inspired by Raphael Moreau @rphlmr for Postgres, extended for Planetscale
 const runMigrate = async () => {

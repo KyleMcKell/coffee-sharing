@@ -1,18 +1,10 @@
 "use client";
 
-import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import { Button } from "~/components/ui/button";
 
-export const AuthButton = () => {
-  return (
-    <SessionProvider>
-      <AuthButtonLogic />
-    </SessionProvider>
-  );
-};
-
-const AuthButtonLogic = () => {
+export function AuthButton() {
   const { status, data } = useSession();
 
   return (
@@ -26,6 +18,11 @@ const AuthButtonLogic = () => {
           {data.user?.name}
         </>
       ) : null}
+      {status === "loading" ? (
+        <>
+          <Button>Loading...</Button>
+        </>
+      ) : null}
     </>
   );
-};
+}

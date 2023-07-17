@@ -1,6 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 
-import { authOptions } from "~/lib/auth";
+import { authOptions } from "~/lib/next-auth";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {

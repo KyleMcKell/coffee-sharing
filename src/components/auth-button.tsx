@@ -10,11 +10,11 @@ export function AuthButton() {
   return (
     <>
       {status === "unauthenticated" ? (
-        <Button onClick={() => signIn()}>Sign in</Button>
+        <Button onClick={() => void signIn()}>Sign in</Button>
       ) : null}
       {status === "authenticated" ? (
         <>
-          <Button onClick={() => signOut()}>Sign out</Button>
+          <Button onClick={() => void signOut()}>Sign out</Button>
           {data.user?.name}
         </>
       ) : null}

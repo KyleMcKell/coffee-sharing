@@ -1,4 +1,4 @@
-import { InferModel, relations } from "drizzle-orm";
+import { relations, type InferModel } from "drizzle-orm";
 import {
   index,
   integer,
@@ -8,7 +8,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import z from "zod";
 

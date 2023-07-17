@@ -1,4 +1,4 @@
-import { InferModel, relations } from "drizzle-orm";
+import { relations, type InferModel } from "drizzle-orm";
 import { pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
 import { accountsTable } from "~/db/schema/accounts";

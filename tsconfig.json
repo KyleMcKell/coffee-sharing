@@ -31,7 +31,8 @@
     ".next/types/**/*.ts",
     "src/lib/env.js",
     ".eslintrc.cjs",
-    ".prettierrc.cjs"
+    ".prettierrc.cjs",
+    "next.config.mjs"
   ],
   "exclude": ["node_modules"]
 }

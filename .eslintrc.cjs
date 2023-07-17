@@ -14,12 +14,6 @@ const config = {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"],
   },
-  overrides: [
-    // Template files don't have reliable type information
-    {
-      extends: ["plugin:@typescript-eslint/disable-type-checked"],
-    },
-  ],
   rules: {
     // These off/not-configured-the-way-we-want lint rules we like & opt into
     "@typescript-eslint/no-explicit-any": "error",

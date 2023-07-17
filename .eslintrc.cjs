@@ -25,6 +25,7 @@ const config = {
       "error",
       { prefer: "type-imports", fixStyle: "inline-type-imports" },
     ],
+    "@typescript-eslint/consistent-type-definitions": ["off"],
     "import/consistent-type-specifier-style": ["error", "prefer-inline"],
   },
 };

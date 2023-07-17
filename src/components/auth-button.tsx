@@ -1,16 +1,30 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { type BuiltInProviderType } from "next-auth/providers";
+import {
+  signIn,
+  signOut,
+  useSession,
+  type LiteralUnion,
+  type SignInOptions,
+} from "next-auth/react";
 
 import { Button } from "~/components/ui/button";
 
-export function AuthButton() {
+type Props = {
+  provider?: LiteralUnion<BuiltInProviderType>;
+  signInOptions?: SignInOptions;
+};
+
+export function AuthButton({ provider, signInOptions }: Props) {
   const { status, data } = useSession();
 
   return (
     <>
       {status === "unauthenticated" ? (
-        <Button onClick={() => void signIn()}>Sign in</Button>
+        <Button onClick={() => void signIn(provider, signInOptions)}>
+          Sign in
+        </Button>
       ) : null}
       {status === "authenticated" ? (
         <>

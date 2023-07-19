@@ -8,6 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
+import { z } from "zod";
 
 import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
 import { usersTable } from "./users";
@@ -42,4 +43,8 @@ export const coffeeBeansRelations = relations(
   }),
 );
 
-export const insertCoffeeBeanSchema = createInsertSchema(coffeeBeansTable);
+export const insertCoffeeBeanSchema = createInsertSchema(coffeeBeansTable, {
+  name: z.string().min(1),
+  tastingNotes: z.array(z.string()),
+  baristaId: z.string().uuid().optional(),
+});

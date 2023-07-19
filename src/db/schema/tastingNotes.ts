@@ -6,7 +6,7 @@ import { usersTable } from "./users";
 
 export const tastingNotesTable = pgTable("tasting_notes", {
   id: uuid("id").notNull().primaryKey().defaultRandom(),
-  note: varchar("name", { length: 255 }).notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
   baristaId: varchar("barista_id", { length: 255 })
     .notNull()
     .references(() => usersTable.id),

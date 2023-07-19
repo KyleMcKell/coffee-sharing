@@ -7,6 +7,7 @@ import {
   useSession,
   type LiteralUnion,
   type SignInOptions,
+  type SignOutParams,
 } from "next-auth/react";
 
 import { Button } from "~/components/ui/button";
@@ -14,10 +15,15 @@ import { Button } from "~/components/ui/button";
 type Props = {
   provider?: LiteralUnion<BuiltInProviderType>;
   signInOptions?: SignInOptions;
+  signOutOptions?: SignOutParams;
 };
 
-export function AuthButton({ provider, signInOptions }: Props) {
-  const { status, data } = useSession();
+export function AuthButton({
+  provider,
+  signInOptions = { callbackUrl: "/", redirect: true },
+  signOutOptions = { callbackUrl: "/", redirect: true },
+}: Props) {
+  const { status } = useSession();
 
   return (
     <>
@@ -28,8 +34,7 @@ export function AuthButton({ provider, signInOptions }: Props) {
       ) : null}
       {status === "authenticated" ? (
         <>
-          <Button onClick={() => void signOut()}>Sign out</Button>
-          {data.user?.name}
+          <Button onClick={() => void signOut(signOutOptions)}>Sign out</Button>
         </>
       ) : null}
       {status === "loading" ? (

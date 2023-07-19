@@ -5,6 +5,9 @@ const config = {
   images: {
     domains: ["pbs.twimg.com"],
   },
+  experimental: {
+    serverActions: true,
+  },
 };
 
 export default config;

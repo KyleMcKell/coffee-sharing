@@ -7,14 +7,15 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
 
-import { coffeeBeansTastingNotesTable } from "~/db/schema/coffeeBeansTastingNotes";
-import { usersTable } from "~/db/schema/users";
+import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
+import { usersTable } from "./users";
 
 export const coffeeBeansTable = pgTable(
   "coffee_beans",
   {
-    id: uuid("id").notNull().primaryKey(),
+    id: uuid("id").notNull().primaryKey().defaultRandom(),
     baristaId: varchar("barista_id", { length: 255 })
       .notNull()
       .references(() => usersTable.id),
@@ -40,3 +41,5 @@ export const coffeeBeansRelations = relations(
     coffeeBeansToTastingNotes: many(coffeeBeansTastingNotesTable),
   }),
 );
+
+export const insertCoffeeBeanSchema = createInsertSchema(coffeeBeansTable);

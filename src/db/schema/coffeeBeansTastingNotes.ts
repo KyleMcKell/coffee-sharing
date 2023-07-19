@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
 
-import { coffeeBeansTable } from "~/db/schema/coffeeBeans";
-import { tastingNotesTable } from "~/db/schema/tastingNotes";
+import { coffeeBeansTable } from "./coffeeBeans";
+import { tastingNotesTable } from "./tastingNotes";
 
 export const coffeeBeansTastingNotesTable = pgTable(
   "coffee_beans_tasting_notes",
   {
-    id: uuid("id").notNull().primaryKey(),
+    id: uuid("id").notNull().primaryKey().defaultRandom(),
     coffeeBeanId: uuid("coffee_bean_id")
       .notNull()
       .references(() => coffeeBeansTable.id),

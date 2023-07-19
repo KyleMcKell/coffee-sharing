@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { Inter } from "next/font/google";
 
+import { Header } from "~/components/header";
 import { SessionProvider } from "~/components/providers/session-provider";
 import { ThemeProvider } from "~/components/providers/theme-provider";
 
@@ -24,9 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.variable}>
+      <body className={`${inter.variable} max-w-5xl mx-auto`}>
         <SessionProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Header />
             {children}
           </ThemeProvider>
         </SessionProvider>

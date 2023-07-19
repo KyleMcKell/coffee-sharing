@@ -1,11 +1,11 @@
 import { relations } from "drizzle-orm";
 import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { coffeeBeansTastingNotesTable } from "~/db/schema/coffeeBeansTastingNotes";
-import { usersTable } from "~/db/schema/users";
+import { coffeeBeansTastingNotesTable } from "./coffeeBeansTastingNotes";
+import { usersTable } from "./users";
 
 export const tastingNotesTable = pgTable("tasting_notes", {
-  id: uuid("id").notNull().primaryKey(),
+  id: uuid("id").notNull().primaryKey().defaultRandom(),
   note: varchar("name", { length: 255 }).notNull(),
   baristaId: varchar("barista_id", { length: 255 })
     .notNull()

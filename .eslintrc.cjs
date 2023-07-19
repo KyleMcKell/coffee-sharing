@@ -26,6 +26,9 @@ const config = {
       { prefer: "type-imports", fixStyle: "inline-type-imports" },
     ],
     "@typescript-eslint/consistent-type-definitions": ["off"],
+    "@typescript-eslint/require-await": ["off"],
+    "@typescript-eslint/no-misused-promises": ["off"],
+    "@typescript-eslint/no-empty-interface": ["off"],
     "import/consistent-type-specifier-style": ["error", "prefer-inline"],
   },
 };

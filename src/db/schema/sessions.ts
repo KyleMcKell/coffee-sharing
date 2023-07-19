@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { index, pgTable, timestamp, varchar } from "drizzle-orm/pg-core";
 
-import { usersTable } from "~/db/schema/users";
+import { usersTable } from "./users";
 
 export const sessionsTable = pgTable(
   "sessions",
